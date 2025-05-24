@@ -27,17 +27,17 @@ A modern, responsive admin panel inspired by Intercom, built with React, Vite, a
    ```bash
    git clone https://github.com/yourusername/intercom-admin-clone.git
    cd intercom-admin-clone
-   \`\`\`
+   ```
 
 2. Install dependencies:
    ```bash
    npm install
-   \`\`\`
+   ```
 
 3. Start the development server:
    ```bash
    npm run dev
-   \`\`\`
+   ```
 
 4. Build for production:
    ```bash
