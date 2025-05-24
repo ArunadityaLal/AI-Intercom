@@ -1,13 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Search, Filter, MoreHorizontal, Plus } from 'lucide-react'
-import { Input } from "../components/ui/input"
-import { Button } from "../components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select"
-import { Card, CardContent } from "../components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar"
-import { getInitials } from "../lib/utils"
+import { Search, Filter, MoreHorizontal, Plus } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Card, CardContent } from "@/components/ui/card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { getInitials } from "@/lib/utils"
 
 // Sample customer data
 const sampleCustomers = [
@@ -111,17 +111,17 @@ const sampleCustomers = [
 
 export default function Customers() {
   const [customers, setCustomers] = useState(sampleCustomers)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState("")
   const [isLoading, setIsLoading] = useState(true)
-  const [statusFilter, setStatusFilter] = useState('all')
-  const [planFilter, setPlanFilter] = useState('all')
-  
+  const [statusFilter, setStatusFilter] = useState("all")
+  const [planFilter, setPlanFilter] = useState("all")
+
   useEffect(() => {
     // Simulate loading
     const timer = setTimeout(() => {
       setIsLoading(false)
     }, 800)
-    
+
     return () => clearTimeout(timer)
   }, [])
 
@@ -133,31 +133,27 @@ export default function Customers() {
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
 
     if (diffMins < 60) {
-      return `${diffMins} min${diffMins !== 1 ? 's' : ''} ago`
+      return `${diffMins} min${diffMins !== 1 ? "s" : ""} ago`
     } else if (diffHours < 24) {
-      return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`
+      return `${diffHours} hour${diffHours !== 1 ? "s" : ""} ago`
     } else {
-      return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`
+      return `${diffDays} day${diffDays !== 1 ? "s" : ""} ago`
     }
   }
 
-  const filteredCustomers = customers.filter(customer => {
+  const filteredCustomers = customers.filter((customer) => {
     // Apply search filter
-    const matchesSearch = 
+    const matchesSearch =
       customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       customer.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       customer.company.toLowerCase().includes(searchQuery.toLowerCase())
-    
+
     // Apply status filter
-    const matchesStatus = 
-      statusFilter === 'all' || 
-      customer.status === statusFilter
-    
+    const matchesStatus = statusFilter === "all" || customer.status === statusFilter
+
     // Apply plan filter
-    const matchesPlan = 
-      planFilter === 'all' || 
-      customer.plan === planFilter
-    
+    const matchesPlan = planFilter === "all" || customer.plan === planFilter
+
     return matchesSearch && matchesStatus && matchesPlan
   })
 
@@ -228,49 +224,51 @@ export default function Customers() {
           {filteredCustomers.map((customer) => (
             <Card key={customer.id} className="customer-card">
               <CardContent className="p-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-3">
-                    <Avatar className="h-12 w-12">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-start gap-3 min-w-0 flex-1">
+                    <Avatar className="h-12 w-12 flex-shrink-0">
                       <AvatarImage src={customer.avatar || "/placeholder.svg"} alt={customer.name} />
                       <AvatarFallback>{getInitials(customer.name)}</AvatarFallback>
                     </Avatar>
-                    <div>
-                      <h3 className="font-medium">{customer.name}</h3>
-                      <p className="text-sm text-muted-foreground">{customer.email}</p>
-                      <p className="mt-1 text-xs">{customer.company}</p>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-medium truncate">{customer.name}</h3>
+                      <p className="text-sm text-muted-foreground truncate">{customer.email}</p>
+                      <p className="mt-1 text-xs truncate">{customer.company}</p>
                     </div>
                   </div>
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
                     <MoreHorizontal className="h-4 w-4" />
                   </Button>
                 </div>
-                <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
-                  <div>
+
+                <div className="grid grid-cols-2 gap-3 text-sm mb-3">
+                  <div className="min-w-0">
                     <p className="text-xs text-muted-foreground">Location</p>
                     <p className="truncate">{customer.location}</p>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-xs text-muted-foreground">Plan</p>
-                    <p>{customer.plan}</p>
+                    <p className="truncate">{customer.plan}</p>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-xs text-muted-foreground">Last Active</p>
-                    <p>{formatLastActive(customer.lastActive)}</p>
+                    <p className="truncate">{formatLastActive(customer.lastActive)}</p>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-xs text-muted-foreground">Conversations</p>
-                    <p>{customer.conversations}</p>
+                    <p className="truncate">{customer.conversations}</p>
                   </div>
                 </div>
-                <div className="mt-4">
+
+                <div>
                   <span
                     className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                      customer.status === 'active'
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
-                        : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
+                      customer.status === "active"
+                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                        : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
                     }`}
                   >
-                    {customer.status === 'active' ? 'Active' : 'Inactive'}
+                    {customer.status === "active" ? "Active" : "Inactive"}
                   </span>
                 </div>
               </CardContent>
